@@ -5,6 +5,8 @@ const authMiddleware = require('../middleware/authMiddleware');
 
 router.post('/register', teacherController.register);
 router.post('/login', teacherController.login);
+router.post('/logout', authMiddleware, teacherController.teacherLogout);
+
 router.post('/updateteacher',authMiddleware, teacherController.updateTeacher);
 router.delete('/teacherdel',authMiddleware, teacherController.deleteTeacher);
 router.get('/allteacher', teacherController.getAllTeachers)

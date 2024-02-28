@@ -27,13 +27,21 @@ exports.login = async (req, res) => {
             return res.status(401).json({ message: 'Invalid credentials' });
         }
         const token = jwt.sign({ userId: teacher._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-        
+
         res.status(200).json({ token, teacherId: teacher._id });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 };
+exports.teacherLogout = async (req, res) => {
+    try {
+        res.clearCookie('token');
 
+        res.status(200).json({ message: 'Logout successful' });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
 exports.updateTeacher = async (req, res) => {
     try {
         const { id } = req.params;
