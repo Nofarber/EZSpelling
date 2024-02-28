@@ -58,68 +58,34 @@ function TeacherPage() {
       <h1>מורה</h1>
       <div>
         <div>
-          {showAddField.map((v, i) => (
-            <div key={i}>
-              <input
-                autoFocus
-                type="text"
-                placeholder="שם התלמיד (באנגלית)"
-                onChange={(e) => handleChange(e.target.value, i)}
-              />
-            </div>
-          ))}
-          <button
-            onClick={() =>
-              (showAddField[showAddField.length - 1] ||
-                showAddField.length === 0) &&
-              setShowAddField([...showAddField, null])
-
-            }
-          >
-            הוסף תלמידים
-          </button>
-          {showAddField[showAddField.length - 1] && (
-            <button onClick={() => createStudents()}>צור</button>
-          )}
-        </div>
-        {allStudents.map((v, i) => (
-          <div
-            key={i}
-            onClick={() => {
-              setEditing(i), setCurrentStudent(v);
-            }}
-          >
-            <strong>{v.studentName}</strong>
-            <strong>{v.answers ? "בוצע" : "לא בוצע"}</strong>
-            {editing === i && (
-              <div>
-                {v.answers.finalText && (
-                  <textarea
-                    defaultValue={v.answers.finalText}
-                    onChange={(e) =>
-                      setCurrentStudent({
-                        ...currentStudent,
-                        answers: {
-                          ...currentStudent.answers,
-                          finalText: e.target.value,
-                        },
-                      })
-                    }
-                  ></textarea>
+            <div>
+                {showAddField.map((v, i) =>
+                    <div key={i}>
+                        <input autoFocus type="text" placeholder="שם התלמיד (באנגלית)" onChange={(e) => handleChange(e.target.value, i)} />
+                    </div>
                 )}
-                <button
-                  onClick={async () => {
-                    const res = await updateStudent(currentStudent);
-                    setCurrentStudent(res.data.data);
-                    console.log(res);
-                  }}
-                >
-                  שמור
-                </button>
-                <button onClick={() => console.log(currentTeacher)}>log</button>
-              </div>
-            )}
-          </div>
+                <button onClick={() => (showAddField[showAddField.length - 1] || showAddField.length === 0) &&
+                    setShowAddField([...showAddField, null])}>הוסף תלמידים</button>
+                {showAddField[showAddField.length - 1] && <button onClick={() => createStudents()}>צור</button>}
+            </div>
+            {
+                allStudents.map((v, i) =>
+                    <div key={i} onClick={() => { setEditing(i), setCurrentStudent(v) }} >
+                        <strong>{v.studentName}</strong>
+                        <strong>{v.answers ? "בוצע" : "לא בוצע"}</strong>
+                        {editing === i && <div>
+                            {v.answers?.finalText && <div>
+                                <textarea defaultValue={v.answers?.finalText} onChange={(e) => setCurrentStudent({ ...currentStudent, answers: { ...currentStudent.answers, finalText: e.target.value } })}></textarea>
+                                <button onClick={async () => {
+                                    const res = await updateStudent(currentStudent)
+                                    setCurrentStudent(res.data.data)
+                                    console.log(res);
+                                }}>שמור</button>
+                            </div>}
+                            <button onClick={() => console.log(currentTeacher)}>log</button>
+                        </div>}
+                    </div>)
+            }
         ))}
       </div>
     </>
