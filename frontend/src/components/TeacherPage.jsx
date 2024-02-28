@@ -73,6 +73,7 @@ function TeacherPage() {
               (showAddField[showAddField.length - 1] ||
                 showAddField.length === 0) &&
               setShowAddField([...showAddField, null])
+
             }
           >
             הוסף תלמידים

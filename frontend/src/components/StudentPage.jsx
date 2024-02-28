@@ -1,3 +1,7 @@
+
+import PDF from "../components/PDF";
+
+
 import { composeDiary, savePDF, updateStudent } from "../utils/AuthService"
 import { useState, useEffect } from "react"
 import emailjs from '@emailjs/browser';
@@ -11,7 +15,8 @@ function StudentPage() {
 
     const currentUser = JSON.parse(localStorage.getItem("currentUser"))
     const [question, setQuestion] = useState(0)
-    const [answerObj, setAnswerObj] = useState({
+    const [answerObj, setAnswerObj] = useState(
+        currentUser.answers ||{
         firstname: '',
         lastname: '',
         claSs: '',
@@ -76,9 +81,11 @@ function StudentPage() {
 
     const createTxt = async () => {
         if (question === 6) {
-            const ans = await composeDiary(answerObj)
-            console.log(ans);
-            setAnswerObj({ ...answerObj, finalText: ans.data.data })
+            if(currentUser.answers.finalText){
+                const ans = await composeDiary(answerObj)
+                console.log(ans);
+                setAnswerObj({...answerObj,finalText:ans.data.data})
+            }
         }
     }
     useEffect(() => { createTxt() }, [question])
@@ -135,14 +142,12 @@ function StudentPage() {
                     {question === 6 && <div>
                         <h1>ערוך טקסט</h1>
                         <textarea defaultValue={answerObj.finalText} type="text" onChange={(e) => setAnswerObj({ ...answerObj, finalText: e.target.value })} />
+                        <PDF info={answerObj}/>
                     </div>}
                 </div>
                 <button onClick={() => question <= 6 ? setQuestion(question + 1) : handleSubmit() }>{question < 6 ? "הבא" : "סיים"}</button>
                 {question > 0 && <button onClick={() => setQuestion(question - 1)}>הקודם</button>}
-
-
                 <button onClick={() => console.log(currentUser)}>log</button>
-
 
             </div>
         </>

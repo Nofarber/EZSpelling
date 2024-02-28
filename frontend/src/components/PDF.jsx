@@ -3,14 +3,9 @@ import { PDFDownloadLink, PDFViewer } from "@react-pdf/renderer";
 import NameForm from "./NameForm";
 import MyDocument from "./MyDocument";
 
-const PDF = () => {
-  const [pdfData, setPdfData] = useState(null);
+const PDF = ({info}) => {
+  const [ggg, setPdfData] = useState(null);
   const [showPreview, setShowPreview] = useState(false);
-
-  const handleFormSubmit = (data) => {
-    setPdfData(data);
-    setShowPreview(false);
-  };
 
   const handlePreviewButtonClick = () => {
     setShowPreview(true);
@@ -18,8 +13,8 @@ const PDF = () => {
 
   return (
     <div dir="rtl" style={{ margin: "20px" }}>
-      <NameForm onSubmit={handleFormSubmit} />
-      {pdfData && !showPreview && (
+      <button onClick={()=>console.log(info)}>log</button>
+      {info && !showPreview && (
         <button
           style={{ marginTop: "20px" }}
           onClick={handlePreviewButtonClick}
@@ -37,11 +32,11 @@ const PDF = () => {
         >
           <h2>PDF תצוגת</h2>
           <PDFViewer width="500" height="400">
-            <MyDocument formData={pdfData} />
+            <MyDocument formData={info} />
           </PDFViewer>
           <p></p>
           <PDFDownloadLink
-            document={<MyDocument formData={pdfData} />}
+            document={<MyDocument formData={info} />}
             fileName="מחוייבות_אישית.pdf"
           >
             {({ blob, url, loading, error }) =>
