@@ -1,6 +1,6 @@
 import React from 'react';
 import { Document, Page, Text, View, StyleSheet, Font } from '@react-pdf/renderer';
-import RubikRegular from '../font/Rubik-Regular.ttf';
+import RubikRegular from '../fonts/Rubik-Regular.ttf';
 
 Font.register({
   family: "RubikFamily",
