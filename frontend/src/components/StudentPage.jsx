@@ -1,5 +1,5 @@
+import { composeDiary, savePDF, updateStudent } from "../utils/AuthService"
 import { useState, useEffect } from "react"
-import { composeDiary, updateStudent } from "../utils/AuthService"
 import emailjs from '@emailjs/browser';
 import Axios from "axios";
 
@@ -89,7 +89,8 @@ function StudentPage() {
         console.log(currentUser);
         const updatedUser = { ...currentUser, answers: answerObj }
         console.log(updatedUser);
-        localStorage.setItem('currentUser', JSON.stringify(updatedUser))
+        localStorage.setItem('currentUser',JSON.stringify(updatedUser))
+        await savePDF(updatedUser);
         const res = await updateStudent(updatedUser)
         console.log(res)
         sendEmail();
@@ -138,8 +139,8 @@ function StudentPage() {
                 </div>
                 <button onClick={() => question <= 6 ? setQuestion(question + 1) : handleSubmit()}>{question < 6 ? "הבא" : "סיים"}</button>
                 {question > 0 && <button onClick={() => setQuestion(question - 1)}>הקודם</button>}
-                <button onClick={() => console.log(answerObj)}>log</button>
-                <button onClick={sendEmail}>Send Email</button>
+                <button onClick={() => console.log(currentUser)}>log</button>
+
             </div>
         </>
     )
