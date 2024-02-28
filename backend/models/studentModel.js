@@ -11,8 +11,4 @@ const studentSchema = new Schema({
     answers: {type:Object, required:false}
 });
 
-
-   additionalInfo: {
-        text: { type: String, required: false}}
-});
 module.exports = mongoose.model('Student', studentSchema);

@@ -10,16 +10,25 @@ import theme from './theme'
 import { Routes, Route } from 'react-router-dom'
 import TeacherPage from "./components/TeacherPage";
 import StudentPage from "./components/StudentPage";
-
-
+import "./App.css";
+import React, { useState } from "react";
+import PDF from "./components/PDF";
 
 function App() {
-const useUser = useInfo()
-  const setCurrentUser = useUser.SetCurrentUser
-  
+  const [pdfData, setPdfData] = useState(null);
+  const [showPreview, setShowPreview] = useState(false);
+
+  const handleFormSubmit = (data) => {
+    setPdfData(data);
+    setShowPreview(false);
+  };
+
+  const handlePreviewButtonClick = () => {
+    setShowPreview(true);
+  };
   return (
     <>
-    <ThemeProvider theme={theme}>
+    {/* <ThemeProvider theme={theme}>
     <Routes>
       <Route path="/" element={<LandingPage />}/>
       <Route path="/teacher" element={<TeacherPage />}/>
@@ -27,13 +36,8 @@ const useUser = useInfo()
       <Route path="/teacher_login" element={<Login teacherOrStudent={0} />}/>
       <Route path="/student_login" element={<Login teacherOrStudent={1}/>}/>
     </Routes> 
-    </ThemeProvider>
-{/*     
-      <Login />
-      <Signup />
-      <Authenticate />
-      <button onClick={() => {logout(),setCurrentUser(null)}}>Logout</button>
-      <Chet/> */}
+    </ThemeProvider> */}
+    <PDF />
     </>
   );
 }
