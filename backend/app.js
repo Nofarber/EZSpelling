@@ -26,9 +26,6 @@ app.get('/api/data', async (req, res) => {
         const students = await Student.find({});
 
         const data = {
-            // teacherUsername: teacher.username,
-            // studentName: student.studentName,
-            // teacherEmail: teacher.email
             teachers: teachers,
             students: students
         };

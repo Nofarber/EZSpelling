@@ -35,7 +35,7 @@ exports.login = async (req, res) => {
             })
             const t1 = teacher
             delete t1.password
-            res.status(200).json({ status: "success", data: t1 })
+            res.status(200).json({ status: "success", data: t1 ,token})
 
     }} catch (error) {
         res.status(500).json({ error: error.message });
@@ -104,22 +104,16 @@ exports.getAllTeachers = async (req, res) => {
 };
 exports.createStudent = async (req, res) => {
     try {
-        const { username, password, studentName } = req.body;
-
-        if (!req.user) {
-            return res.status(401).json({ error: 'Teacher user not found' });
-        }
-
-        const teacher = await Teacher.findById(req.user._id);
+        const { username, password, studentName, teacherId } = req.body;
+        
+        const teacher = await Teacher.findById(teacherId);
         if (!teacher) {
             return res.status(404).json({ error: 'Teacher user not found in the database' });
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        const newStudent = new Student({ username, password: hashedPassword, role: 'student', studentName });
-        newStudent.teacher = teacher._id;
-
+        const newStudent = new Student({ studentName, username, password: hashedPassword, role: 'student', teacher:teacherId});
         await newStudent.save();
 
         res.status(201).json(newStudent);
@@ -179,11 +173,11 @@ exports.getAllStudents = async (req, res) => {
 };
 exports.getAllStudentsByTeacher = async (req, res) => {
     try {
-        const teacherId = req.user._id;
+        const teacherId = req.body._id;
 
         const students = await Student.find({ teacher: teacherId });
 
-        res.status(200).json(students);
+        res.status(200).json({status:"seccess",data: students});
     } catch (error) {
         console.error('Error fetching students:', error);
         res.status(500).json({ error: error.message });

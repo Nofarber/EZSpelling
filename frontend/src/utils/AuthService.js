@@ -46,6 +46,14 @@ export const updateStudent = async (data) => {
 
 export const getAllStudents = async (data) => {
     return axios.post(
+        `http://localhost:8000/api/teacher/teachersstudents`,
+        data, {
+            withCredentials: true,
+        }
+    );
+};
+export const newStudents = async (data) => {
+    return axios.post(
         `http://localhost:8000/api/teacher/student`,
         data, {
             withCredentials: true,

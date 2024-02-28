@@ -35,6 +35,8 @@ exports.studentLogin = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
+
+
 exports.logout = async (req, res) => {
     try {
         res.clearCookie('token');
@@ -63,8 +65,8 @@ exports.compose = async (req, res) => {
             whatIContributed,
             finalText
         } = req.body
-        const prompt = 
-        `שם: ${firstname},
+        const prompt =
+            `שם: ${firstname},
          שם משפחה: ${lastname},
          כיתה: ${claSs},
           מקום התנדבות: ${volenteeringPlace},
@@ -76,22 +78,20 @@ exports.compose = async (req, res) => {
            this is the information provided by a pupil who volenteerd in the community, please use all of the information in order to write a short paragraph, in hebrew, from the perspective of the pupil, describing how was his experience as a volenteer.`;
         const result = await model.generateContent(prompt);
         const response = await result.response;
-        res.status(200).json({ status: "success", data: response.text()})
+        res.status(200).json({ status: "success", data: response.text() })
     } catch (error) {
         console.error('Error generating content:', error);
     }
 };
 
-
 exports.updateStudent = async (req, res) => {
     try {
-        const id = req.body._id;
-        const updatedStudentData = req.body;
-
-        const student = await Student.findOneAndUpdate({ _id: id }, updatedStudentData, { new: true });
-
+        const id = req.body._id
+        let student = await Student.findOneAndUpdate({ _id: id }, req.body, { new: true });
         if (!student) {
             return res.status(404).json({ message: 'Student not found' });
+        } else {
+            res.status(200).json({ status: "success", data: student });
         }
         res.status(200).json({ status: 'success', data: student });
     } catch (error) {
