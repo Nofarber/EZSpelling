@@ -1,35 +1,49 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import "./App.css";
+import React, { useState } from "react";
+import { PDFDownloadLink, PDFViewer } from "@react-pdf/renderer";
+import NameForm from "./components/NameForm";
+import MyDocument from "./components/MyDocument";
 
-function App() {
-  const [count, setCount] = useState(0)
+const App = () => {
+  const [pdfData, setPdfData] = useState(null);
+  const [showPreview, setShowPreview] = useState(false);
+
+  const handleFormSubmit = (data) => {
+    setPdfData(data);
+    setShowPreview(false);
+  };
+
+  const handlePreviewButtonClick = () => {
+    setShowPreview(true);
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    <div dir="rtl" style={{margin:"20px"}}>
+      <NameForm onSubmit={handleFormSubmit} />
+      {pdfData && !showPreview && (
+        <button style={{marginTop : "20px"}} onClick={handlePreviewButtonClick}>הצג מסמך</button>
+      )}
+      {showPreview && (
+        <div
+          style={{ border: "1px solid black", margin: "20px", padding: "20px" }}
+        >
+          <h2> PDF תצוגת </h2>
+          <PDFViewer width="500" height="400">
+            <MyDocument formData={pdfData} />
+          </PDFViewer>
+          <p></p>
+          <PDFDownloadLink
+            document={<MyDocument formData={pdfData} />}
+            fileName="מחוייבות_אישית.pdf"
+          >
+            {({ blob, url, loading, error }) =>
+              loading ? "...טוען" : "הורד מסמך"
+            }
+          </PDFDownloadLink>
+        </div>
+      )}
+    </div>
+  );
+};
 
-export default App
+export default App;
