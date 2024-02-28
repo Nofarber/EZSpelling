@@ -1,18 +1,19 @@
 import React, { useState } from "react";
-import { login } from "../utils/AuthService";
+import { loginStudent } from "../utils/AuthService";
+import { loginTeacher } from "../utils/AuthService";
 import { useNavigate } from "react-router-dom";
 
 function Login({teacherOrStudent}) {
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate()
 
   const handleLogin = async () => {
     try {
-      const response = await login({ email, password });
-      console.log(response.data.user);
+      const response = teacherOrStudent? await loginStudent({ username, password }):await loginTeacher({ username, password });
+      console.log(response.data);
       localStorage.setItem("token", JSON.stringify(response.data.token));
-      localStorage.setItem('currentUser',JSON.stringify(response.data.user))
+      localStorage.setItem('currentUser',JSON.stringify(response.data.data))
       if (teacherOrStudent) {
         navigate("/student")
       } else{
@@ -27,10 +28,10 @@ function Login({teacherOrStudent}) {
     <div>
       <div>{teacherOrStudent?<h1>כניסת תלמיד</h1>:<h1>כניסת מורה</h1>}</div>
       <input
-        type="email"
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
+        type="text"
+        placeholder="username"
+        value={username}
+        onChange={(e) => setUsername(e.target.value)}
       />
       <input
         type="password"

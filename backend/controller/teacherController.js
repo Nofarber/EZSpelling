@@ -17,17 +17,26 @@ exports.register = async (req, res) => {
 
 exports.login = async (req, res) => {
     try {
-        const { username, password } = req.body;
-        const teacher = await Teacher.findOne({ username });
-        if (!teacher) {
-            return res.status(401).json({ message: 'Invalid credentials' });
+        const { username, password } = req.body
+        const teacher = await Teacher.findOne({ username })
+        if (!teacher || !(await bcrypt.compare(password, teacher.password))) {
+            return res.status(401).json({
+                status: "fail",
+                message: "Incorrect email or password",
+            });
+        } else {
+            const token = jwt.sign({ _id: teacher._id }, process.env.JWT_SECRET, {
+                expiresIn: "1h",
+            });
+            res.cookie("token", token, {
+                httpOnly: true,
+                maxAge: 60000,
+                sameSite: "strict",
+            })
+            const t1 = teacher
+            delete t1.password
+            res.status(200).json({ status: "success", data: t1 })
         }
-        const isPasswordMatch = await bcrypt.compare(password, teacher.password);
-        if (!isPasswordMatch) {
-            return res.status(401).json({ message: 'Invalid credentials' });
-        }
-        const token = jwt.sign({ userId: teacher._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-        res.status(200).json({ token, teacherId: teacher._id });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -49,7 +58,7 @@ exports.createStudent = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 10);
 
         const newStudent = new Student({ username, password: hashedPassword, role: 'student', studentName });
-        newStudent.teacher = teacher._id; 
+        newStudent.teacher = teacher._id;
 
         await newStudent.save();
 
@@ -91,7 +100,7 @@ exports.deleteStudent = async (req, res) => {
             return res.status(404).json({ message: 'Student not found' });
         }
 
-        await Student.deleteOne({ _id: id }); 
+        await Student.deleteOne({ _id: id });
 
         res.status(200).json({ message: 'Student deleted successfully' });
     } catch (error) {
@@ -101,8 +110,9 @@ exports.deleteStudent = async (req, res) => {
 
 exports.getAllStudents = async (req, res) => {
     try {
-        const students = await Student.find();
-        res.status(200).json(students);
+        const currentTeacher = req.body._id
+        const students = await Student.find({teacher: currentTeacher});
+        res.status(200).json({status:"success",data:students});
     } catch (error) {
         res.status(500).json({ error: error.message });
     }

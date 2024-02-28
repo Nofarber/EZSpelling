@@ -8,6 +8,6 @@ router.post('/login', teacherController.login);
 router.post('/student', authMiddleware, teacherController.createStudent);
 router.put('/student/:id', authMiddleware, teacherController.updateStudent);
 router.delete('/delstudent/:id', authMiddleware, teacherController.deleteStudent);
-router.get('/student', authMiddleware, teacherController.getAllStudents);
+router.post('/student', authMiddleware, teacherController.getAllStudents);
 
 module.exports = router;

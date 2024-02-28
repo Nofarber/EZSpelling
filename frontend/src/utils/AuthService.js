@@ -11,12 +11,50 @@ export const signup = async (userData) => {
     );
 };
 
-export const login = async (credentials) => {
+export const loginStudent = async (credentials) => {
     return axios.post(
-        `http://localhost:8000/api/users/login`,
+        `http://localhost:8000/api/students/studentlog`,
         credentials
     );
 };
+export const loginTeacher = async (credentials) => {
+    return axios.post(
+        `http://localhost:8000/api/teacher/login`,
+        credentials, {
+            withCredentials: true,
+        }
+    );
+};
+export const composeDiary = async (questions) => {
+    console.log(questions);
+    return axios.post(
+        `http://localhost:8000/api/students/compose`,
+        questions, {
+            withCredentials: true,
+        }
+    );
+};
+
+export const updateStudent = async (data) => {
+    return axios.post(
+        `http://localhost:8000/api/students/update`,
+        data, {
+            withCredentials: true,
+        }
+    );
+};
+
+export const getAllStudents = async (data) => {
+    return axios.post(
+        `http://localhost:8000/api/teacher/student`,
+        data, {
+            withCredentials: true,
+        }
+    );
+};
+
+
+
 export const logout = async () => {
 
     try {
