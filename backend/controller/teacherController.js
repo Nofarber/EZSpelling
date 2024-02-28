@@ -5,9 +5,9 @@ const Student = require('../models/studentModel');
 
 exports.register = async (req, res) => {
     try {
-        const { username, password } = req.body;
+        const { email, username, password } = req.body;
         const hashedPassword = await bcrypt.hash(password, 10);
-        const teacher = new Teacher({ username, password: hashedPassword });
+        const teacher = new Teacher({ email, username, password: hashedPassword });
         await teacher.save();
         res.status(201).json({ message: 'Teacher registered successfully' });
     } catch (error) {
@@ -27,12 +27,65 @@ exports.login = async (req, res) => {
             return res.status(401).json({ message: 'Invalid credentials' });
         }
         const token = jwt.sign({ userId: teacher._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        
         res.status(200).json({ token, teacherId: teacher._id });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 };
 
+exports.updateTeacher = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { email, username, password } = req.body;
+         
+
+        const teacher = await Teacher.findById(id);
+
+
+        if (!teacher) {
+            return res.status(404).json({ message: 'Teacher not found' });
+        }
+
+        if (email) teacher.email = email;
+        if (username) teacher.username = username;
+        if (password) {
+            const hashedPassword = await bcrypt.hash(password, 10);
+            teacher.password = hashedPassword;
+        }
+
+        await teacher.save();
+
+        res.status(200).json({ message: 'Teacher updated successfully' });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+exports.deleteTeacher = async (req, res) => {
+    try {
+        const { id } = req.body; 
+
+        const teacher = await Teacher.findById(id);
+
+        if (!teacher) {
+            return res.status(404).json({ message: 'Teacher not found' });
+        }
+        await Teacher.deleteOne({ _id: id });
+
+        res.status(200).json({ message: 'Teacher deleted successfully' });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+exports.getAllTeachers = async (req, res) => {
+    try {
+        const teachers = await Teacher.find();
+
+        res.status(200).json(teachers);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
 exports.createStudent = async (req, res) => {
     try {
         const { username, password, studentName } = req.body;
@@ -104,6 +157,18 @@ exports.getAllStudents = async (req, res) => {
         const students = await Student.find();
         res.status(200).json(students);
     } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+exports.getAllStudentsByTeacher = async (req, res) => {
+    try {
+        const teacherId = req.user._id;
+
+        const students = await Student.find({ teacher: teacherId });
+
+        res.status(200).json(students);
+    } catch (error) {
+        console.error('Error fetching students:', error);
         res.status(500).json({ error: error.message });
     }
 };

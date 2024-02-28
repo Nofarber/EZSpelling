@@ -22,7 +22,7 @@ exports.studentLogin = async (req, res) => {
             return res.status(401).json({ message: 'Invalid credentials2' });
         }
 
-        const token = jwt.sign({ userId: student._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        const token = jwt.sign({ userId: student._id }, process.env.JWT_SECRET, { expiresIn: '3h' });
 
         res.status(200).json({ token });
     } catch (error) {
