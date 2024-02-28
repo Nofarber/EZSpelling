@@ -28,7 +28,7 @@ function App() {
   };
   return (
     <>
-    {/* <ThemeProvider theme={theme}>
+    {<ThemeProvider theme={theme}>
     <Routes>
       <Route path="/" element={<LandingPage />}/>
       <Route path="/teacher" element={<TeacherPage />}/>
@@ -36,7 +36,7 @@ function App() {
       <Route path="/teacher_login" element={<Login teacherOrStudent={0} />}/>
       <Route path="/student_login" element={<Login teacherOrStudent={1}/>}/>
     </Routes> 
-    </ThemeProvider> */}
+    </ThemeProvider> }
     <PDF />
     </>
   );

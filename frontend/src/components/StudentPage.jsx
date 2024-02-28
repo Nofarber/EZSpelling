@@ -136,10 +136,10 @@ function StudentPage() {
                         <textarea defaultValue={answerObj.finalText} type="text" onChange={(e) => setAnswerObj({ ...answerObj, finalText: e.target.value })} />
                     </div>}
                 </div>
-                <button onClick={() => question <= 6 ? setQuestion(question + 1) : handleSubmit()}>{question < 6 ? "הבא" : "סיים"}</button>
+                <button onClick={() => question <= 6 ? setQuestion(question + 1) : handleSubmit() }>{question < 6 ? "הבא" : "סיים"}</button>
                 {question > 0 && <button onClick={() => setQuestion(question - 1)}>הקודם</button>}
                 <button onClick={() => console.log(answerObj)}>log</button>
-                <button onClick={sendEmail}>Send Email</button>
+                
             </div>
         </>
     )
