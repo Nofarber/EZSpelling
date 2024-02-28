@@ -7,7 +7,10 @@ const studentSchema = new Schema({
     username: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     role: { type: String, default: 'student' },
-    teacher: { type: Schema.Types.ObjectId, ref: 'Teacher' },
+    teacher: { type: Schema.Types.ObjectId, ref: 'Teacher' } ,
+    answers: {type:Object, required:false}
+});
+
 
    additionalInfo: {
         text: { type: String, required: false}}

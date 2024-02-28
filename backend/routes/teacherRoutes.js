@@ -15,5 +15,4 @@ router.put('/student/:id', authMiddleware, teacherController.updateStudent);
 router.delete('/delstudent/:id', authMiddleware, teacherController.deleteStudent);
 router.get('/allstudents', authMiddleware, teacherController.getAllStudents);
 router.get('/teachersstudents', authMiddleware, teacherController.getAllStudentsByTeacher);
-
 module.exports = router;

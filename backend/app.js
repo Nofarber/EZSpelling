@@ -1,11 +1,15 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const cors = require('cors');
+var cors = require('cors')
 const app = express();
 
 
 app.use(express.json());
-app.use(cors());
+const corsOpts = {
+    origin:'http://localhost:5173',
+    credentials:true
+}
+app.use(cors(corsOpts))
 
 
 const teacherRoutes = require('./routes/teacherRoutes');
