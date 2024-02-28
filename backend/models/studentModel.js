@@ -8,7 +8,8 @@ const studentSchema = new Schema({
     password: { type: String, required: true },
     role: { type: String, default: 'student' },
     teacher: { type: Schema.Types.ObjectId, ref: 'Teacher' } ,
-    answers: {type:Object, required:false}
+    answers: {type:Object, required:false},
+    pdfFile: { type: String }
 });
 
 module.exports = mongoose.model('Student', studentSchema);

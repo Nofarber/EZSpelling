@@ -2,7 +2,6 @@ import { logout } from "./utils/AuthService";
 import Signup from "./components/SignUp";
 import Authenticate from "./components/UserData";
 import Login from "./components/Login";
-import Chet from "./components/Chet";
 import LandingPage from "./components/LandingPage";
 import { useInfo } from "./utils/context";
 import { ThemeProvider } from '@mui/material/styles';
@@ -19,6 +18,7 @@ function App() {
   return (
     <>
     <ThemeProvider theme={theme}>
+
     <Routes>
       <Route path="/" element={<LandingPage />}/>
       <Route path="/teacher" element={<TeacherPage />}/>
@@ -27,6 +27,7 @@ function App() {
       <Route path="/student_login" element={<Login teacherOrStudent={1}/>}/>
     </Routes> 
     </ThemeProvider> 
+
     </>
   );
 }
