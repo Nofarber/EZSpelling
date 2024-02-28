@@ -63,12 +63,14 @@ function TeacherPage() {
                         <strong>{v.studentName}</strong>
                         <strong>{v.answers ? "בוצע" : "לא בוצע"}</strong>
                         {editing === i && <div>
-                            <textarea defaultValue={v.answers.finalText} onChange={(e) => setCurrentStudent({ ...currentStudent, answers: { ...currentStudent.answers, finalText: e.target.value } })}></textarea>
+                            {v.answers?.finalText && <div>
+                                <textarea defaultValue={v.answers?.finalText} onChange={(e) => setCurrentStudent({ ...currentStudent, answers: { ...currentStudent.answers, finalText: e.target.value } })}></textarea>
                             <button onClick={async () => {
                                 const res = await updateStudent(currentStudent)
                                 setCurrentStudent(res.data.data)
                                 console.log(res);
                             }}>שמור</button>
+                            </div>}
                             <button onClick={() => console.log(currentTeacher)}>log</button>
                         </div>}
                     </div>)

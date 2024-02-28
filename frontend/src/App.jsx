@@ -15,20 +15,10 @@ import React, { useState } from "react";
 import PDF from "./components/PDF";
 
 function App() {
-  const [pdfData, setPdfData] = useState(null);
-  const [showPreview, setShowPreview] = useState(false);
 
-  const handleFormSubmit = (data) => {
-    setPdfData(data);
-    setShowPreview(false);
-  };
-
-  const handlePreviewButtonClick = () => {
-    setShowPreview(true);
-  };
   return (
     <>
-    {/* <ThemeProvider theme={theme}>
+    <ThemeProvider theme={theme}>
     <Routes>
       <Route path="/" element={<LandingPage />}/>
       <Route path="/teacher" element={<TeacherPage />}/>
@@ -36,8 +26,7 @@ function App() {
       <Route path="/teacher_login" element={<Login teacherOrStudent={0} />}/>
       <Route path="/student_login" element={<Login teacherOrStudent={1}/>}/>
     </Routes> 
-    </ThemeProvider> */}
-    <PDF />
+    </ThemeProvider> 
     </>
   );
 }

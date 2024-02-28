@@ -1,6 +1,7 @@
 import React from 'react';
 import { Document, Page, Text, View, StyleSheet, Font } from '@react-pdf/renderer';
 import RubikRegular from '../fonts/Rubik-Regular.ttf';
+import { useEffect } from 'react';
 
 Font.register({
   family: "RubikFamily",
@@ -26,16 +27,21 @@ const styles = StyleSheet.create({
   }
 });
 
-const MyDocument = ({ formData }) => (
-  <Document>
+const MyDocument = ( {formData} ) => {
+  const data = formData.firstname
+
+  return(
+    <Document>
     <Page style={styles.page}>
       <View style={styles.view}>
-        <Text style={styles.text}>שם: {formData.name}</Text>
-        <Text style={styles.text}>מקום ההתנבות: {formData.place}</Text>
-        <Text style={styles.text}>פרטים על ההתנדבות: {formData.details}</Text>
+        <Text style={styles.text}>{`שם פרטי: ${formData.firstname}`}</Text>
+        <Text style={styles.text}>{`שם משפחה: ${formData.lastname}`}</Text>
+        <Text style={styles.text}> {`מקום ההתנבות: ${formData.volenteeringPlace}`}</Text>
+        <Text style={styles.text}>{formData.finalText}</Text>
       </View>
     </Page>
   </Document>
-);
+    )
+};
 
 export default MyDocument;
