@@ -37,7 +37,7 @@ exports.login = async (req, res) => {
             delete t1.password
             res.status(200).json({ status: "success", data: t1 })
 
-    } catch (error) {
+    }} catch (error) {
         res.status(500).json({ error: error.message });
     }
 };

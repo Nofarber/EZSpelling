@@ -2,6 +2,7 @@ const Student = require('../models/studentModel');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
+const Teacher = require('../models/teacherModel')
 
 dotenv.config();
 exports.studentLogin = async (req, res) => {
@@ -30,6 +31,9 @@ exports.studentLogin = async (req, res) => {
         const t1 = student
         delete t1.password
         res.status(200).json({ status: "success", data: t1 })
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
 };
 exports.logout = async (req, res) => {
     try {
@@ -78,17 +82,20 @@ exports.compose = async (req, res) => {
     }
 };
 
-exports.updateStudent = async (req,res) =>{
+
+exports.updateStudent = async (req, res) => {
     try {
-        const id = req.body._id
-        let student = await Student.findOneAndUpdate({_id:id},req.body,{new:true});
+        const id = req.body._id;
+        const updatedStudentData = req.body;
+
+        const student = await Student.findOneAndUpdate({ _id: id }, updatedStudentData, { new: true });
+
         if (!student) {
             return res.status(404).json({ message: 'Student not found' });
-        }else{
-            res.status(200).json({status:"success", data: student});
         }
+        res.status(200).json({ status: 'success', data: student });
     } catch (error) {
+        console.error('Error updating student:', error);
         res.status(500).json({ error: error.message });
     }
-}
-
+};
