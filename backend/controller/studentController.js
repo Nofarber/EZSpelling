@@ -2,6 +2,7 @@ const Student = require('../models/studentModel');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
+const Teacher = require('../models/teacherModel')
 
 dotenv.config();
 exports.studentLogin = async (req, res) => {
@@ -30,7 +31,6 @@ exports.studentLogin = async (req, res) => {
         const t1 = student
         delete t1.password
         res.status(200).json({ status: "success", data: t1 })
-
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -93,8 +93,9 @@ exports.updateStudent = async (req, res) => {
         } else {
             res.status(200).json({ status: "success", data: student });
         }
+        res.status(200).json({ status: 'success', data: student });
     } catch (error) {
+        console.error('Error updating student:', error);
         res.status(500).json({ error: error.message });
     }
-}
-
+};
