@@ -14,12 +14,12 @@ exports.studentLogin = async (req, res) => {
 
         const student = await Student.findOne({ username, role: 'student' });
         if (!student) {
-            return res.status(401).json({ message: 'Invalid credentials' });
+            return res.status(401).json({ message: 'Invalid credentials1' });
         }
 
         const isPasswordMatch = await bcrypt.compare(password, student.password);
         if (!isPasswordMatch) {
-            return res.status(401).json({ message: 'Invalid credentials' });
+            return res.status(401).json({ message: 'Invalid credentials2' });
         }
 
         const token = jwt.sign({ userId: student._id }, process.env.JWT_SECRET, { expiresIn: '1h' });

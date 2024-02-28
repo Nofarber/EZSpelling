@@ -27,7 +27,7 @@ exports.login = async (req, res) => {
             return res.status(401).json({ message: 'Invalid credentials' });
         }
         const token = jwt.sign({ userId: teacher._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-        res.status(200).json({ token });
+        res.status(200).json({ token, teacherId: teacher._id });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -41,14 +41,14 @@ exports.createStudent = async (req, res) => {
             return res.status(401).json({ error: 'Teacher user not found' });
         }
 
-        const teacher = await User.findById(req.user._id);
+        const teacher = await Teacher.findById(req.user._id);
         if (!teacher) {
             return res.status(404).json({ error: 'Teacher user not found in the database' });
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        const newStudent = new User({ username, password: hashedPassword, role: 'student', studentName });
+        const newStudent = new Student({ username, password: hashedPassword, role: 'student', studentName });
         newStudent.teacher = teacher._id; 
 
         await newStudent.save();
@@ -91,7 +91,7 @@ exports.deleteStudent = async (req, res) => {
             return res.status(404).json({ message: 'Student not found' });
         }
 
-        await student.remove();
+        await Student.deleteOne({ _id: id }); 
 
         res.status(200).json({ message: 'Student deleted successfully' });
     } catch (error) {
