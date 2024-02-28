@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { composeDiary, updateStudent } from "../utils/AuthService"
+import { composeDiary, savePDF, updateStudent } from "../utils/AuthService"
 import { useEffect } from "react"
 
 
@@ -32,6 +32,7 @@ function StudentPage() {
         const updatedUser = {...currentUser, answers:answerObj}
         console.log(updatedUser);
         localStorage.setItem('currentUser',JSON.stringify(updatedUser))
+        await savePDF(updatedUser);
         const res = await updateStudent(updatedUser)
         console.log(res)
     }
@@ -77,7 +78,7 @@ function StudentPage() {
                 </div>
                 <button onClick={() => question <= 6 ? setQuestion(question + 1): handleSubmit()}>{question < 6 ? "הבא" : "סיים"}</button>
                 {question > 0 && <button onClick={() => setQuestion(question - 1)}>הקודם</button>}
-                <button onClick={() => console.log(answerObj)}>log</button>
+                <button onClick={() => console.log(currentUser)}>log</button>
             </div>
         </>
     )
