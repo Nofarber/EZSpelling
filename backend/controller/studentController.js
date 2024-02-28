@@ -5,7 +5,7 @@ const dotenv = require("dotenv");
 const { PDFDocument } = require("pdf-lib");
 const fontkit = require("fontkit");
 const fs = require("fs");
-// const  RubikRegular  = require("../../frontend/src/fonts/Rubik-Regular.ttf");
+const Teacher = require('../models/teacherModel')
 
 dotenv.config();
 
@@ -62,10 +62,21 @@ exports.studentLogin = async (req, res) => {
     if (!student) {
       return res.status(401).json({ message: "Invalid credentials1" });
     }
-
-    const isPasswordMatch = await bcrypt.compare(password, student.password);
-    if (!isPasswordMatch) {
-      return res.status(401).json({ message: "Invalid credentials2" });
+        const isPasswordMatch = await bcrypt.compare(password, student.password);
+        if (!isPasswordMatch) {
+            return res.status(401).json({ message: 'Invalid credentials2' });
+        }
+        const token = jwt.sign({ userId: student._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        res.cookie("token", token, {
+            httpOnly: true,
+            maxAge: 60000,
+            sameSite: "strict",
+        })
+        const t1 = student
+        delete t1.password
+        res.status(200).json({ status: "success", data: t1 })
+    } catch (error) {
+        res.status(500).json({ error: error.message });
     }
     const token = jwt.sign({ userId: student._id }, process.env.JWT_SECRET, {
       expiresIn: "1h",
@@ -152,3 +163,4 @@ exports.updateStudent = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
