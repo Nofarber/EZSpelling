@@ -3,8 +3,22 @@ import React, { useState } from "react";
 import { PDFDownloadLink, PDFViewer } from "@react-pdf/renderer";
 import NameForm from "./components/NameForm";
 import MyDocument from "./components/MyDocument";
+import { logout } from "./utils/AuthService";
+import Signup from "./components/SignUp";
+import Authenticate from "./components/UserData";
+import Login from "./components/Login";
+import Chet from "./components/Chet";
+import LandingPage from "./components/LandingPage";
+import { useInfo } from "./utils/context";
+import { ThemeProvider } from '@mui/material/styles';
+import theme from './theme'
+import { Routes, Route } from 'react-router-dom'
+import TeacherPage from "./components/TeacherPage";
+import StudentPage from "./components/StudentPage";
 
-const App = () => {
+
+
+function App() {
   const [pdfData, setPdfData] = useState(null);
   const [showPreview, setShowPreview] = useState(false);
 
@@ -18,6 +32,23 @@ const App = () => {
   };
 
   return (
+  <>
+    <ThemeProvider theme={theme}>
+    <Routes>
+      <Route path="/" element={<LandingPage />}/>
+      <Route path="/teacher" element={<TeacherPage />}/>
+      <Route path="/student" element={<StudentPage />}/>
+      <Route path="/teacher_login" element={<Login teacherOrStudent={0} />}/>
+      <Route path="/student_login" element={<Login teacherOrStudent={1}/>}/>
+    </Routes> 
+    </ThemeProvider>
+{/*     
+      <Login />
+      <Signup />
+      <Authenticate />
+      <button onClick={() => {logout(),setCurrentUser(null)}}>Logout</button>
+      <Chet/> */}
+
     <div dir="rtl" style={{margin:"20px"}}>
       <NameForm onSubmit={handleFormSubmit} />
       {pdfData && !showPreview && (
@@ -43,7 +74,8 @@ const App = () => {
         </div>
       )}
     </div>
+    </>
   );
-};
 
+          }
 export default App;
