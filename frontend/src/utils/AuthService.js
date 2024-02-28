@@ -4,6 +4,16 @@ import { useInfo } from "./context";
 
 axios.defaults.withCredentials = true;
 
+
+export const savePDF = async (currUser) => {
+    try {
+      const res = await axios.post('http://localhost:8000/api/students/save-pdf', currUser);
+      console.log(res);
+    } catch (error) {
+      console.error('Error saving PDF:', error);
+    }
+  };
+
 export const signup = async (userData) => {
     return axios.post(
         `http://localhost:8000/api/users/signup`,
