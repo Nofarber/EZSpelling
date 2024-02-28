@@ -1,9 +1,14 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { composeDiary, updateStudent } from "../utils/AuthService"
-import { useEffect } from "react"
+import emailjs from '@emailjs/browser';
+import Axios from "axios";
 
 
 function StudentPage() {
+
+    const [students, setStudents] = useState([])
+    const [teachers, setTeachers] = useState([])
+
     const currentUser = JSON.parse(localStorage.getItem("currentUser"))
     const [question, setQuestion] = useState(0)
     const [answerObj, setAnswerObj] = useState({
@@ -18,23 +23,79 @@ function StudentPage() {
         whatIContributed: '',
         finalText: ''
     })
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await Axios.get('http://localhost:8000/api/data');
+                setStudents(response.data.students)
+                setTeachers(response.data.teachers)
+
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+
+        fetchData();
+    }, []);
+
+
+
+    const sendEmail = () => {
+        let studentsName = ''
+        let teachersUsername = ''
+        let teachersEmail = ''
+        const userID = '9dbcnd7fJaVzTJIx8';
+        const templateID = 'template_ij7a3c7';
+
+        students.map((student) => {
+            if (student._id === JSON.parse(localStorage.getItem('currentUser'))._id) {
+                studentsName = student.studentName
+                console.log(student)
+                teachers.map((teacher) => {
+                    if (teacher._id === student.teacher) {
+                        teachersUsername = teacher.username
+                        teachersEmail = teacher.email
+                        console.log(teacher)
+                    }
+                })
+            }
+        })
+        const templateParams = {
+            studentName: studentsName,
+            teacherUsername: teachersUsername,
+            teacherEmail: teachersEmail
+        };
+
+        emailjs.send('service_f917x0d', templateID, templateParams, userID)
+            .then((response) => {
+                console.log('Email sent:', response.status, response.text);
+            }, (error) => {
+                console.error('Error sending email:', error);
+           });
+    };
+
     const createTxt = async () => {
         if (question === 6) {
             const ans = await composeDiary(answerObj)
             console.log(ans);
-            setAnswerObj({...answerObj,finalText:ans.data.data})
+            setAnswerObj({ ...answerObj, finalText: ans.data.data })
         }
     }
-    useEffect(()=>{createTxt()},[question])
+    useEffect(() => { createTxt() }, [question])
 
-    const handleSubmit = async ()=>{
+
+
+    const handleSubmit = async () => {
         console.log(currentUser);
-        const updatedUser = {...currentUser, answers:answerObj}
+        const updatedUser = { ...currentUser, answers: answerObj }
         console.log(updatedUser);
-        localStorage.setItem('currentUser',JSON.stringify(updatedUser))
+        localStorage.setItem('currentUser', JSON.stringify(updatedUser))
         const res = await updateStudent(updatedUser)
         console.log(res)
+        sendEmail();
     }
+
+
 
     return (
         <>
@@ -75,9 +136,10 @@ function StudentPage() {
                         <textarea defaultValue={answerObj.finalText} type="text" onChange={(e) => setAnswerObj({ ...answerObj, finalText: e.target.value })} />
                     </div>}
                 </div>
-                <button onClick={() => question <= 6 ? setQuestion(question + 1): handleSubmit()}>{question < 6 ? "הבא" : "סיים"}</button>
+                <button onClick={() => question <= 6 ? setQuestion(question + 1) : handleSubmit()}>{question < 6 ? "הבא" : "סיים"}</button>
                 {question > 0 && <button onClick={() => setQuestion(question - 1)}>הקודם</button>}
                 <button onClick={() => console.log(answerObj)}>log</button>
+                <button onClick={sendEmail}>Send Email</button>
             </div>
         </>
     )
