@@ -5,17 +5,17 @@
 }
 
 .card {
-    border: 1px solid black; 
-    padding: 10px;
-    background-position: center;
-    background-color: aliceblue;
-    background-repeat: no-repeat;
-    background-size: cover;
-    transition: all 0.5s;
-    background-color: aliceblue;
+    border: none;
+    padding: 20px;
+    background-color: #fff;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 20px; /* Adjust the border-radius as needed */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.874); /* Add box shadow for a raised effect */
 }
+
 .card:hover {
-    transform: scale(1.1);
+    transform: scale(1.05);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2); /* Increase the box shadow on hover */
 }
 
 .landingButton {
@@ -29,4 +29,8 @@
     font-size: 16px;
     margin-top: 10px;
     cursor: pointer;
+}
+
+h2 {
+    color: white;
 }
