@@ -6,7 +6,7 @@ const theme = createTheme({
       main: '#F48FB1', // Blue color for primary elements
     },
     secondary: {
-      main: '#283593', // Pink color for secondary elements
+      main: '#ffffff', // Pink color for secondary elements
     },
     background: {
       default: '#BDBDBD', // Light gray background
