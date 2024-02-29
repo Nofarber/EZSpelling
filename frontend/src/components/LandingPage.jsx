@@ -16,7 +16,7 @@ const LandingPage = () => {
   return (
     <div>
       <div style={{ display: "flex", justifyContent: "center", marginTop: "5vh" }}>
-        <h2>EZSpelling - ברוך הבא ל</h2>
+        <h2 className="h2-class">EZSpelling - ברוך הבא ל</h2>
       </div>
       <div className="landingContainer" style={{ marginTop: "5vh" }}>
         <div className="card">
