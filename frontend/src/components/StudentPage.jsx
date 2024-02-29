@@ -116,48 +116,47 @@ function StudentPage() {
         <>
             <div>
                 <div>{question === 0 && <div>
-                    <h1>שם פרטי</h1>
+                    <h1 style={{color:"white"}}>שם פרטי</h1>
                     <input defaultValue={answerObj.firstname} type="text" onChange={(e) => setAnswerObj({ ...answerObj, firstname: e.target.value })} />
-                    <h1>שם משפחה</h1>
+                    <h1 style={{color:"white"}}>שם משפחה</h1>
                     <input defaultValue={answerObj.lastname} type="text" onChange={(e) => setAnswerObj({ ...answerObj, lastname: e.target.value })} />
-                    <h1>כיתה</h1>
+                    <h1 style={{color:"white"}}>כיתה</h1>
                     <input defaultValue={answerObj.claSs} type="text" onChange={(e) => setAnswerObj({ ...answerObj, class: e.target.value })} />
                 </div>}
                     {question === 1 && <div>
-                        <h1>מקום התנדבות</h1>
+                        <h1 style={{color:"white"}}>מקום התנדבות</h1>
                         <input defaultValue={answerObj.volenteeringPlace} type="text" onChange={(e) => setAnswerObj({ ...answerObj, volenteeringPlace: e.target.value })} />
-                        <h1>?מה עשית בהתנדבות</h1>
+                        <h1 style={{color:"white"}}>?מה עשית בהתנדבות</h1>
                         <input defaultValue={answerObj.volenteeringSum} type="text" onChange={(e) => setAnswerObj({ ...answerObj, volenteeringSum: e.target.value })} />
                     </div>}
                     {question === 2 && <div>
-                        <h1>דבר שהיה טוב בהתנדבות</h1>
+                        <h1 style={{color:"white"}}>דבר שהיה טוב בהתנדבות</h1>
                         <input defaultValue={answerObj.volenteeringGood} type="text" onChange={(e) => setAnswerObj({ ...answerObj, volenteeringGood: e.target.value })} />
                     </div>}
                     {question === 3 && <div>
-                        <h1>דבר שהיה רע בהתנדבות</h1>
+                        <h1 style={{color:"white"}}>דבר שהיה רע בהתנדבות</h1>
                         <input defaultValue={answerObj.volenteeringbad} type="text" onChange={(e) => setAnswerObj({ ...answerObj, volenteeringbad: e.target.value })} />
                     </div>}
                     {question === 4 && <div>
-                        <h1>משהו חדש שלמדתי בהתנדבות</h1>
+                        <h1 style={{color:"white"}}>משהו חדש שלמדתי בהתנדבות</h1>
                         <input defaultValue={answerObj.whatILearned} type="text" onChange={(e) => setAnswerObj({ ...answerObj, whatILearned: e.target.value })} />
                     </div>}
                     {question === 5 && <div>
-                        <h1>במה ההתנדבות שלי עזרה לחברה</h1>
+                        <h1 style={{color:"white"}}>במה ההתנדבות שלי עזרה לחברה</h1>
                         <input defaultValue={answerObj.whatIContributed} type="text" onChange={(e) => setAnswerObj({ ...answerObj, whatIContributed: e.target.value })} />
                     </div>}
                     {question === 6 &&<div>
                         { load ? <div>
                         <img src="https://media.tenor.com/BINsHS7Uo-0AAAAi/temple-loader.gif" width="120" height="120" />
-                    </div> : <div>
-                        <h1>ערוך טקסט</h1>
-                        <textarea defaultValue={answerObj.finalText} type="text" onChange={(e) => setAnswerObj({ ...answerObj, finalText: e.target.value })} />
-                        <PDF info={answerObj} />
+                    </div> : <div >
+                        <h1 style={{color:"white"}}>ערוך טקסט</h1>
+                        <textarea style={{width:"400px"}} defaultValue={answerObj.finalText} type="text" onChange={(e) => setAnswerObj({ ...answerObj, finalText: e.target.value })} />
+                        <PDF info={answerObj} style={{width:"700px"}}/>
                     </div>}
                     </div>}
                 </div>
                 {question > 0 && <button onClick={() => setQuestion(question - 1)}>הקודם</button>}
                 <button onClick={() => question <= 5 ? setQuestion(question + 1) : handleSubmit()}>{question < 6 ? "הבא" : "סיים"}</button>
-                {/* <button onClick={() => console.log(currentUser)}>log</button> */}
 
             </div>
         </>

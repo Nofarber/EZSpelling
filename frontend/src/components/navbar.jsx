@@ -32,7 +32,7 @@ function Navbar() {
       {currentUser ? (
         <div style={{ flex: 1, textAlign: "left" }}>
           <strong style={{flex: 2,textAlign: "right"}}>שלום {currentUser.username}</strong>
-          <button onClick={handleLogout} style={{ color:"white" ,marginRight: "60px" }}>התנתק</button>
+          <button onClick={handleLogout} style={{marginRight: "60px" }}>התנתק</button>
         </div>
       ) : null}
     </div>

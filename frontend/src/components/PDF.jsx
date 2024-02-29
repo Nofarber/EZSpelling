@@ -13,7 +13,6 @@ const PDF = ({info}) => {
 
   return (
     <div dir="rtl" style={{ margin: "20px" }}>
-      <button onClick={()=>console.log(info)}>log</button>
       {info && (
         <button
           style={{ marginTop: "20px" }}
@@ -30,8 +29,8 @@ const PDF = ({info}) => {
             padding: "20px",
           }}
         >
-          <h2>PDF תצוגת</h2>
-          <PDFViewer width="90%" height="700">
+          <h2 className="h2-class">תצוגת PDF </h2>
+          <PDFViewer width="500" height="400">
             <MyDocument formData={info} />
           </PDFViewer>
           <p></p>
