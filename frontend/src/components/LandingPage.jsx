@@ -1,34 +1,39 @@
-import { useState } from 'react'
-import {ask} from '../utils/AuthService'
-import {Box, Button, Container, Typography,Menu, MenuItem,Tooltip, IconButton,Avatar,Divider,ListItemIcon ,} from "@mui/material";
-import Login from "./Login";
-import { useNavigate } from 'react-router-dom';
-import './LandingPage.css'
+import { useState } from "react";
+import { ask } from "../utils/AuthService";
+import { useNavigate } from "react-router-dom";
+import "./LandingPage.css";
 
+const LandingPage = () => {
+  const navigate = useNavigate();
 
-const LandingPage = ()=>{
+  const [question, setQuestion] = useState("");
+  const [allQnA, setAllQnA] = useState([]);
 
-    const navigate = useNavigate()
+  const handleAsk = () => {
+    ask(question).then((res) => setAllQnA([...allQnA, res.data]));
+  };
 
-const [question,setQuestion] = useState('')
-const [allQnA,setAllQnA] = useState([])
-const handleAsk = ()=>{
-    ask(question).then((res) => setAllQnA([...allQnA,res.data]))
-}
-
-return(
-    <>
-    <div className='landingContainer'>
-        <div className='card'>
-            <h2>כניסת מורה</h2>
-            <button className='landingButton' onClick={()=>navigate("/teacher_login")}>כניסה</button>
+  return (
+    <div>
+      <div style={{ display: "flex", justifyContent: "center", marginTop: "5vh" }}>
+        <h2>EZSpelling - ברוך הבא ל</h2>
+      </div>
+      <div className="landingContainer" style={{ marginTop: "5vh" }}>
+        <div className="card">
+          <h2 style={{ fontSize: "1.5rem", color: "#1B1A55", textAlign: "center" }}>כניסת מורה</h2>
+          <button className="landingButton" onClick={() => navigate("/teacher_login")}>
+            כניסה
+          </button>
         </div>
-        <div className='card'>
-            <h2>כניסת תלמיד</h2>
-            <button className='landingButton' onClick={()=>navigate("/student_login")}>כניסה</button>
+        <div className="card">
+          <h2 style={{ fontSize: "1.5rem", color: "#1B1A55", textAlign: "center" }}>כניסת תלמיד</h2>
+          <button className="landingButton" onClick={() => navigate("/student_login")}>
+            כניסה
+          </button>
         </div>
-    </div>
-    </>
-)
-}
-export default LandingPage
+      </div>
+    </div>
+  );
+};
+
+export default LandingPage;
