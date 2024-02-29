@@ -12,13 +12,15 @@ import StudentPage from "./components/StudentPage";
 import "./App.css";
 import React, { useState } from "react";
 import PDF from "./components/PDF";
+import Navbar from "./components/navbar";
 
 function App() {
 
   return (
     <>
     <ThemeProvider theme={theme}>
-
+      <Navbar/>
+      <div style={{height:"60px",fontSize:"40px"}}></div>
     <Routes>
       <Route path="/" element={<LandingPage />}/>
       <Route path="/teacher" element={<TeacherPage />}/>

@@ -1,0 +1,32 @@
+.landingContainer {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px; 
+}
+
+.card {
+    border: 1px solid black; 
+    padding: 10px;
+    background-position: center;
+    background-color: aliceblue;
+    background-repeat: no-repeat;
+    background-size: cover;
+    transition: all 0.5s;
+    background-color: aliceblue;
+}
+.card:hover {
+    transform: scale(1.1);
+}
+
+.landingButton {
+    background-color: #525CEB; 
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin-top: 10px;
+    cursor: pointer;
+}

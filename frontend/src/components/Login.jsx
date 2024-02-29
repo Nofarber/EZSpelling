@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { loginStudent } from "../utils/AuthService";
 import { loginTeacher } from "../utils/AuthService";
 import { useNavigate } from "react-router-dom";
+import "./Login.css"
 
 function Login({teacherOrStudent}) {
   const [username, setUsername] = useState("");
@@ -20,28 +21,32 @@ function Login({teacherOrStudent}) {
         navigate("/teacher")
       }
     } catch (error) {
-      console.error(error.response.data);
+      console.error(error);
     }
   };
 
   return (
-    <div>
-      <div>{teacherOrStudent?<h1>כניסת תלמיד</h1>:<h1>כניסת מורה</h1>}</div>
-      <input
-        type="text"
-        placeholder="username"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-      />
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <button onClick={handleLogin}>Login</button>
-    </div>
-  );
+    <div className="loginContainer">
+  <div className="loginHeader">
+    {teacherOrStudent ? <h1 className="loginTitle">כניסת תלמיד</h1> : <h1 className="loginTitle">כניסת מורה</h1>}
+  </div>
+  <input
+    type="text"
+    className="loginInput"
+    placeholder="שם משתמש"
+    value={username}
+    onChange={(e) => setUsername(e.target.value)}
+  />
+  <input
+    type="password"
+    className="loginInput"
+    placeholder="סיסמה"
+    value={password}
+    onChange={(e) => setPassword(e.target.value)}
+  />
+  <button className="loginButton" onClick={handleLogin}>כניסה</button>
+</div>
+  );
 }
 
 export default Login;
