@@ -1,5 +1,5 @@
 import React from 'react';
-import { Document, Page, Text, View, StyleSheet, Font } from '@react-pdf/renderer';
+import { Document, Page, Text, View, StyleSheet, Font, Image } from '@react-pdf/renderer';
 import RubikRegular from '../fonts/Rubik-Regular.ttf';
 import { useEffect } from 'react';
 
@@ -24,11 +24,17 @@ const styles = StyleSheet.create({
     color: "black",
     fontFamily: "RubikFamily",
     direction: "rtl" 
+  },
+  image:{
+    width:"90%",
+    alignSelf:"center",
+    marginTop:"30px"
   }
 });
 
 const MyDocument = ( {formData} ) => {
-  const data = formData.firstname
+  const data = formData.imgURL
+
 
   return(
     <Document>
@@ -38,6 +44,7 @@ const MyDocument = ( {formData} ) => {
         <Text style={styles.text}>{`שם משפחה: ${formData.lastname}`}</Text>
         <Text style={styles.text}> {`מקום ההתנבות: ${formData.volenteeringPlace}`}</Text>
         <Text style={styles.text}>{formData.finalText}</Text>
+        <Image style={styles.image} src={data} />
       </View>
     </Page>
   </Document>
