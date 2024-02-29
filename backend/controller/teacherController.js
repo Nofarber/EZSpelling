@@ -5,9 +5,9 @@ const Student = require('../models/studentModel');
 
 exports.register = async (req, res) => {
     try {
-        const { username, password } = req.body;
+        const { email, username, password } = req.body;
         const hashedPassword = await bcrypt.hash(password, 10);
-        const teacher = new Teacher({ username, password: hashedPassword });
+        const teacher = new Teacher({ email, username, password: hashedPassword });
         await teacher.save();
         res.status(201).json({ message: 'Teacher registered successfully' });
     } catch (error) {
@@ -17,40 +17,103 @@ exports.register = async (req, res) => {
 
 exports.login = async (req, res) => {
     try {
-        const { username, password } = req.body;
-        const teacher = await Teacher.findOne({ username });
-        if (!teacher) {
-            return res.status(401).json({ message: 'Invalid credentials' });
-        }
-        const isPasswordMatch = await bcrypt.compare(password, teacher.password);
-        if (!isPasswordMatch) {
-            return res.status(401).json({ message: 'Invalid credentials' });
-        }
-        const token = jwt.sign({ userId: teacher._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-        res.status(200).json({ token });
+        const { username, password } = req.body
+        const teacher = await Teacher.findOne({ username })
+        if (!teacher || !(await bcrypt.compare(password, teacher.password))) {
+            return res.status(401).json({
+                status: "fail",
+                message: "Incorrect email or password",
+            });
+        } else {
+            const token = jwt.sign({ _id: teacher._id }, process.env.JWT_SECRET, {
+                expiresIn: "1h",
+            });
+            res.cookie("token", token, {
+                httpOnly: true,
+                maxAge: 60000,
+                sameSite: "strict",
+            })
+            const t1 = teacher
+            delete t1.password
+            res.status(200).json({ status: "success", data: t1 ,token})
+
+    }} catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+exports.teacherLogout = async (req, res) => {
+    try {
+        res.clearCookie('token');
+
+        res.status(200).json({ message: 'Logout successful' });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 };
-
-exports.createStudent = async (req, res) => {
+exports.updateTeacher = async (req, res) => {
     try {
-        const { username, password, studentName } = req.body;
+        const { id } = req.params;
+        const { email, username, password } = req.body;
+         
 
-        if (!req.user) {
-            return res.status(401).json({ error: 'Teacher user not found' });
+        const teacher = await Teacher.findById(id);
+
+
+        if (!teacher) {
+            return res.status(404).json({ message: 'Teacher not found' });
         }
 
-        const teacher = await User.findById(req.user._id);
+        if (email) teacher.email = email;
+        if (username) teacher.username = username;
+        if (password) {
+            const hashedPassword = await bcrypt.hash(password, 10);
+            teacher.password = hashedPassword;
+        }
+
+        await teacher.save();
+
+        res.status(200).json({ message: 'Teacher updated successfully' });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+exports.deleteTeacher = async (req, res) => {
+    try {
+        const { id } = req.body; 
+
+        const teacher = await Teacher.findById(id);
+
+        if (!teacher) {
+            return res.status(404).json({ message: 'Teacher not found' });
+        }
+        await Teacher.deleteOne({ _id: id });
+
+        res.status(200).json({ message: 'Teacher deleted successfully' });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+exports.getAllTeachers = async (req, res) => {
+    try {
+        const teachers = await Teacher.find();
+
+        res.status(200).json(teachers);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+exports.createStudent = async (req, res) => {
+    try {
+        const { username, password, studentName, teacherId } = req.body;
+        
+        const teacher = await Teacher.findById(teacherId);
         if (!teacher) {
             return res.status(404).json({ error: 'Teacher user not found in the database' });
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        const newStudent = new User({ username, password: hashedPassword, role: 'student', studentName });
-        newStudent.teacher = teacher._id; 
-
+        const newStudent = new Student({ studentName, username, password: hashedPassword, role: 'student', teacher:teacherId});
         await newStudent.save();
 
         res.status(201).json(newStudent);
@@ -91,7 +154,7 @@ exports.deleteStudent = async (req, res) => {
             return res.status(404).json({ message: 'Student not found' });
         }
 
-        await student.remove();
+        await Student.deleteOne({ _id: id });
 
         res.status(200).json({ message: 'Student deleted successfully' });
     } catch (error) {
@@ -101,9 +164,22 @@ exports.deleteStudent = async (req, res) => {
 
 exports.getAllStudents = async (req, res) => {
     try {
-        const students = await Student.find();
-        res.status(200).json(students);
+        const currentTeacher = req.body._id
+        const students = await Student.find({teacher: currentTeacher});
+        res.status(200).json({status:"success",data:students});
     } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+exports.getAllStudentsByTeacher = async (req, res) => {
+    try {
+        const teacherId = req.body._id;
+
+        const students = await Student.find({ teacher: teacherId });
+
+        res.status(200).json({status:"seccess",data: students});
+    } catch (error) {
+        console.error('Error fetching students:', error);
         res.status(500).json({ error: error.message });
     }
 };
