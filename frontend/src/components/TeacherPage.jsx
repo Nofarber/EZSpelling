@@ -4,6 +4,7 @@ import { useState } from "react"
 import { Button } from "@mui/base"
 import { PDFDownloadLink, PDFViewer } from "@react-pdf/renderer"
 import MyDocument from "./MyDocument"
+import './TeacherPage.css'
 
 function TeacherPage() {
     const currentTeacher = JSON.parse(localStorage.getItem("currentUser"))
@@ -13,6 +14,7 @@ function TeacherPage() {
     const [showAddField, setShowAddField] = useState([])
     const [loadedStudents, setLoadedStudents] = useState(allStudents)
     const [showPreview, setShowPreview] = useState(false);
+    const [load,setLoad] = useState(true)
 
     const handlePreviewButtonClick = () => {
         setShowPreview(!showPreview);
@@ -25,10 +27,16 @@ function TeacherPage() {
     }, [])
 
     const initialGetStudents = async () => {
-        const ff = await getAllStudents(currentTeacher)
-        setAllStudents(ff.data.data)
-        setLoadedStudents(ff.data.data)
-        console.log(ff.data.data);
+        try{
+            const ff = await getAllStudents(currentTeacher)
+            setAllStudents(ff.data.data)
+            setLoadedStudents(ff.data.data)
+            console.log(ff.data.data);
+        } catch(e) {
+            console.log(e)
+        }finally{
+            setLoad(false)
+        }
     }
 
     const handleChange = (e, i) => {
@@ -59,7 +67,7 @@ function TeacherPage() {
     }
 
     return (<>
-        <div style={{ display: "flex", flexDirection: "column", alignItems: 'center', justifyContent: "start", backgroundColor: "#535C91", width: "80vw", height: "100vh" }}>
+        <div style={{ display: "flex", flexDirection: "column", alignItems: 'center', justifyContent: "start", backgroundColor: "#01013C", width: "80vw", minHeight: "100vh" }}>
             <div>
                 {showAddField.map((v, i) =>
                     <div key={i}>
@@ -70,12 +78,14 @@ function TeacherPage() {
                     setShowAddField([...showAddField, null])}>הוסף תלמידים</button>
                 {showAddField[showAddField.length - 1] && <button onClick={() => createStudents()}>צור</button>}
             </div>
-            <input style={{ height: "3em" }} type="text" placeholder="חפש תלמיד" onChange={(e) => handleSearch(e.target.value)} />
-            {
+            <input style={{height:"5vh"}} type="text" placeholder="חפש תלמיד" onChange={(e) => handleSearch(e.target.value)} />
+            {load? <div>
+                <img src="https://media.tenor.com/BINsHS7Uo-0AAAAi/temple-loader.gif" width="120" height="120" />
+            </div>: 
                 loadedStudents.map((v, i) =>
-                    <div style={{ border: "black 2px solid", width: "90%", margin: "10px", backgroundColor: "#F3F3F3", borderRadius: "10px", transition: "all 0.5s" }} key={i} onClick={() => { setEditing(i), setCurrentStudent(v) }} >
+                    <div className="stu-div" style={{ border: "black 2px solid", width: "90%", margin: "10px", borderRadius: "10px", transition: "all 0.5s" }} key={i} onClick={() => { setEditing(i), setCurrentStudent(v) }} >
                         <h2 style={{ margin: "5px" }}>{v.studentName}</h2>
-                        {v.answers ? <strong style={{ color: "green" }}>בוצע</strong> : <strong style={{ color: "red" }}>לא בוצע</strong>}
+                        {v.answers.finalText ? <strong style={{ color: "green" }}>בוצע</strong> : <strong style={{ color: "red" }}>לא בוצע</strong>}
                         {editing === i && <div>
                             <strong style={{ margin: "5px" }}>{` ${v.username}123 :סיסמא`}</strong>
                             <strong style={{ margin: "5px" }}>{` ${v.username} :שם משתמש`}</strong>
@@ -89,7 +99,7 @@ function TeacherPage() {
                                     setCurrentStudent(res.data.data)
                                     console.log(res);
                                 }}>שמור</button>
-                                <button onClick={() => console.log(currentStudent)}>log</button>
+                                {/* <button onClick={() => console.log(currentStudent)}>log</button> */}
                                 {currentStudent && (
                                     <button
                                         style={{ marginTop: "20px" }}

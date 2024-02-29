@@ -8,13 +8,13 @@ const PDF = ({info}) => {
   const [showPreview, setShowPreview] = useState(false);
 
   const handlePreviewButtonClick = () => {
-    setShowPreview(true);
+    setShowPreview(!showPreview);
   };
 
   return (
     <div dir="rtl" style={{ margin: "20px" }}>
       <button onClick={()=>console.log(info)}>log</button>
-      {info && !showPreview && (
+      {info && (
         <button
           style={{ marginTop: "20px" }}
           onClick={handlePreviewButtonClick}
@@ -31,18 +31,20 @@ const PDF = ({info}) => {
           }}
         >
           <h2>PDF תצוגת</h2>
-          <PDFViewer width="500" height="400">
+          <PDFViewer width="90%" height="700">
             <MyDocument formData={info} />
           </PDFViewer>
           <p></p>
+          <span style={{backgroundColor:"white"}}>
           <PDFDownloadLink
             document={<MyDocument formData={info} />}
             fileName="מחוייבות_אישית.pdf"
-          >
+            >
             {({ blob, url, loading, error }) =>
               loading ? "...טוען" : "הורד מסמך"
             }
           </PDFDownloadLink>
+            </span>
         </div>
       )}
     </div>

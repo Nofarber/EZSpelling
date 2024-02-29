@@ -1,0 +1,7 @@
+.stu-div{
+    background-color: aliceblue;
+}
+.stu-div:hover{
+    background-color: rgb(217, 236, 253);
+    transform: scale(1.1);
+}
