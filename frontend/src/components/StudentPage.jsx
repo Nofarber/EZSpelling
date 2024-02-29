@@ -5,7 +5,9 @@ import PDF from "../components/PDF";
 import { composeDiary, savePDF, updateStudent } from "../utils/AuthService"
 import { useState, useEffect } from "react"
 import emailjs from '@emailjs/browser';
-import Axios from "axios";
+import axios from "axios";
+import dotenv from "dotenv";
+dotenv.config();
 
 
 function StudentPage() {
@@ -26,12 +28,13 @@ function StudentPage() {
             volenteeringbad: '',
             whatILearned: '',
             whatIContributed: '',
-            finalText: ''
+            finalText: '',
+            imgURL: ''
         })
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await Axios.get('http://localhost:8000/api/data');
+                const response = await axios.get('http://localhost:8000/api/data');
                 setStudents(response.data.students)
                 setTeachers(response.data.teachers)
 
@@ -97,7 +100,19 @@ function StudentPage() {
     }
     useEffect(() => { createTxt(false) }, [question])
 
+    const presetKey = process.env.PRESET_KEY
+    const cloudName = process.env.CLOUD_NAME
 
+    const handleImgUpload = (e) => {
+        const file = e.target.files[0]
+        const formData = new FormData()
+        formData.append('file', file)
+        formData.append('upload_preset', presetKey)
+        axios.post(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, formData, { withCredentials: false })
+            .then(res => setAnswerObj({ ...answerObj, imgURL: res.data.secure_url }))
+            .catch(err => console.log(err))
+
+    }
 
     const handleSubmit = async () => {
         console.log(currentUser);
@@ -146,6 +161,15 @@ function StudentPage() {
                         <input defaultValue={answerObj.whatIContributed} type="text" onChange={(e) => setAnswerObj({ ...answerObj, whatIContributed: e.target.value })} />
                     </div>}
                     {question === 6 && <div>
+                        <h1 style={{ color: "white" }}>:העלה תמונה</h1>
+                        <input type="file" onChange={(e) => handleImgUpload(e)} />
+                        <div>
+                            {answerObj.imgURL &&
+                                <img src={answerObj.imgURL} height="320" />
+                            }
+                        </div>
+                    </div>}
+                    {question === 7 && <div>
                         {load ? <div>
                             <img src="https://media.tenor.com/BINsHS7Uo-0AAAAi/temple-loader.gif" width="120" height="120" />
                         </div> : <div >
@@ -158,7 +182,7 @@ function StudentPage() {
                         </div>}
                     </div>}
                 </div>
-                <button onClick={() => question <= 5 ? setQuestion(question + 1) : handleSubmit(false)}>{question < 6 ? "הבא" : "סיים"}</button>
+                <button onClick={() => question <= 6 ? setQuestion(question + 1) : handleSubmit(false)}>{question < 7 ? "הבא" : "סיים"}</button>
                 {question > 0 && <button onClick={() => setQuestion(question - 1)}>הקודם</button>}
 
             </div>
