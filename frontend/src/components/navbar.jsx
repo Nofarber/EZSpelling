@@ -5,34 +5,36 @@ function Navbar() {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    localStorage.setItem('currentUser', JSON.stringify(null));
+    localStorage.setItem("currentUser", JSON.stringify(null));
     localStorage.setItem("token", JSON.stringify(null));
-    navigate('/');
+    navigate("/");
   };
 
   return (
-    <div style={{
-      position: "fixed",
-      top: "0px",
-      right: "0px",
-      left: "0px",
-      backgroundImage: "linear-gradient(to bottom, #070F2B, #1B1A55)",
-      color: "white",
-      paddingTop: "20px",
-      paddingBottom: "20px",
-      height: "50px",
-      display: "flex",
-      justifyContent: "space-between",
-      alignItems: "center",
-      padding: "0 20px", // Adjust padding as needed
-      boxSizing: "border-box", // Ensure padding is included in width
-      direction: "rtl", // Set direction to right-to-left
-    }}>
-  
+    <div
+      style={{
+        position: "absolute",
+        top: "0",
+        right: "0",
+        backgroundImage: "linear-gradient(to bottom, #070F2B, #1B1A55)",
+        color: "white",
+        padding: "10px 20px", // Add padding for better spacing
+        boxSizing: "border-box", // Ensure padding is included in width
+        direction: "rtl",
+        width: "100%",
+        height:"12vh"
+      }}
+    >
       {currentUser ? (
-        <div style={{ flex: 1, textAlign: "left" }}>
-          <strong style={{flex: 2,textAlign: "right"}}>שלום {currentUser.username}</strong>
-          <button onClick={handleLogout} style={{marginRight: "60px" }}>התנתק</button>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "baseline",
+          }}
+        >
+          <h2 style={{ fontWeight: "normal" }}>שלום {currentUser.username}</h2>
+          <button onClick={handleLogout}>התנתק</button>
         </div>
       ) : null}
     </div>
